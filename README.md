@@ -3,7 +3,7 @@
 A working visual workspace built with Astro and React. Node.js 24 recommended.
 
 ```sh
-npm ci --cache /workspace/.npm
+npm ci
 npm run dev
 ```
 
@@ -31,14 +31,15 @@ Demo images are embedded in the project for portable exports. Browser libraries 
 
 ## Validation
 
-With the development server running:
+Install the test browser once after installing dependencies (or after updating Playwright):
 
 ```sh
+npm run test:install
 npm test
 npm run build
 ```
 
-Browser tests use `/usr/bin/chromium` by default; set `CHROMIUM_PATH` to another Chromium executable when needed. They exercise editing/persistence, responsive views, layers and undo, custom library connection, code preview, project creation, SEO, loop controls, and actual ZIP contents.
+These commands work in Windows PowerShell, macOS, and Linux. Tests start the development server automatically, or reuse one already running on port 4321. Playwright uses its own downloaded Chromium; no system browser path is required. You can optionally set `CHROMIUM_PATH` to use a specific browser executable. Screenshots and exported test projects are written under `test-results/`. They exercise editing/persistence, responsive views, layers and undo, custom library connection, code preview, project creation, SEO, loop controls, and actual ZIP contents.
 
 ## Demo media
 

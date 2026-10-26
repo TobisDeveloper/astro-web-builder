@@ -1,10 +1,11 @@
 import {test,expect} from '@playwright/test';
 import {unzipSync,strFromU8} from 'fflate';
-test('visual editing, responsive preview, layers, undo and persistence',async({page})=>{
+import {join,dirname} from 'node:path';
+test('visual editing, responsive preview, layers, undo and persistence',async({page},testInfo)=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('/');await expect(page.locator('.app')).toHaveAttribute('data-ready','true');await expect(page.locator('.brand')).toBeVisible();
  const canvas=page.frameLocator('iframe');await expect(canvas.getByRole('heading',{name:'Spaces for living. Designed for you.'})).toBeVisible();
- await page.screenshot({path:'/tmp/forma-desktop.png',fullPage:true});
+ await page.screenshot({path:testInfo.outputPath('forma-desktop.png'),fullPage:true});
  const transfer=await page.frames().find(f=>f.parentFrame()).evaluateHandle(()=>new DataTransfer());
  await canvas.locator('[data-node="projects"]').dispatchEvent('dragstart',{dataTransfer:transfer});
  await canvas.locator('[data-node="intro"]').dispatchEvent('drop',{dataTransfer:transfer});
@@ -22,7 +23,7 @@ test('visual editing, responsive preview, layers, undo and persistence',async({p
  await expect(page.locator('.statusbar')).toContainText('5 elements');await expect(canvas.getByRole('heading',{name:'Made with Forma'})).toBeVisible();
  expect(errors).toEqual([]);
 });
-test('code editing, library connection and Astro archive export',async({page})=>{
+test('code editing, library connection and Astro archive export',async({page},testInfo)=>{
  await page.goto('/');await expect(page.locator('.app')).toHaveAttribute('data-ready','true');await page.getByRole('button',{name:'Libraries',exact:true}).click();
  await page.locator('.library-item').first().getByRole('button').click();await expect(page.locator('.installed')).toContainText('GSAP');
  await expect.poll(()=>page.frames().find(f=>f.parentFrame())?.evaluate(()=>typeof window.gsap),{timeout:15000}).toBe('object');
@@ -31,7 +32,7 @@ test('code editing, library connection and Astro archive export',async({page})=>
  await page.getByRole('button',{name:'Apply & preview'}).click();await expect(page.frameLocator('iframe').getByRole('heading',{name:'A custom website'})).toBeVisible();
  await page.getByRole('button',{name:'Publish',exact:true}).click();const downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:'Export Astro project'}).click();const d=await downloadPromise;const fs=await import('node:fs/promises');const archive=unzipSync(new Uint8Array(await fs.readFile(await d.path())));
  expect(Object.keys(archive)).toContain('src/pages/index.astro');expect(strFromU8(archive['src/pages/index.astro'])).toContain('A custom website');expect(strFromU8(archive['src/pages/index.astro'])).toContain('GSAP 3.13.0');expect(Object.keys(archive)).toContain('public/llms.txt');
- await fs.mkdir('/tmp/forma-export/src/pages',{recursive:true});for(const [name,data] of Object.entries(archive)){await fs.mkdir('/tmp/forma-export/'+name.split('/').slice(0,-1).join('/'),{recursive:true});await fs.writeFile('/tmp/forma-export/'+name,data)}
+ const exportDir=testInfo.outputPath('astro-export');for(const [name,data] of Object.entries(archive)){const target=join(exportDir,name);await fs.mkdir(dirname(target),{recursive:true});await fs.writeFile(target,data)}
 });
 test('new projects, SEO and video controls',async({page})=>{
  await page.goto('/');await expect(page.locator('.app')).toHaveAttribute('data-ready','true');await page.getByRole('button',{name:'Start with a template'}).click();await page.getByLabel('Project name',{exact:true}).fill('My next idea');await page.locator('.template-grid button').last().click();await expect(page.locator('.project-breadcrumb')).toContainText('My next idea');
