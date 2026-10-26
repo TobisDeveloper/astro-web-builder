@@ -3,17 +3,34 @@ on:
   push:
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      publish_release:
+        description: Publish the tested Windows downloads to GitHub Releases
+        type: boolean
+        default: true
 permissions:
   contents: read
 jobs:
   windows:
     runs-on: windows-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
+      - name: Read and validate app version
+        id: version
+        shell: pwsh
+        env:
+          RELEASE_REF_TYPE: ${{ github.ref_type }}
+          RELEASE_TAG_NAME: ${{ github.ref_name }}
+        run: |
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          "version=$version" >> $env:GITHUB_OUTPUT
+          if ($env:RELEASE_REF_TYPE -eq 'tag' -and $env:RELEASE_TAG_NAME -ne "v$version") { throw 'Release tag must match package.json version.' }
       - run: npm ci
       - run: npm run desktop:install
       - run: npm run build
@@ -42,7 +59,7 @@ jobs:
           if-no-files-found: error
           retention-days: 30
   release:
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_release)
     needs: windows
     runs-on: ubuntu-latest
     permissions:
@@ -55,6 +72,9 @@ jobs:
       - name: Publish Windows downloads
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ needs.windows.outputs.version }}
+          name: Forma v${{ needs.windows.outputs.version }}
+          target_commitish: ${{ github.sha }}
           files: |
             release/*.exe
             release/SHA256SUMS.txt

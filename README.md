@@ -33,7 +33,7 @@ npm run desktop:win
 
 Outputs are written to `release/Forma-Setup-0.2.0-x64.exe` and `release/Forma-Portable-0.2.0-x64.exe`. `npm run desktop:pack` creates an unpacked application for your current operating system. `npm run test:desktop` checks the built editor inside Electron (run `npm run build` first). The desktop smoke test checks isolation, bundled assets, font uploads, branding, native ZIP export, and project persistence across restart.
 
-The **Windows desktop app** GitHub Actions workflow builds on a `v*` tag or a manual workflow run. It runs the browser tests, creates both Windows binaries, tests the packaged app on Windows, and uploads a downloadable artifact. Tag builds also publish the executables to GitHub Releases. The workflow uses GitHub's scoped token; no personal token is stored in the app or repository.
+The **Windows desktop app** GitHub Actions workflow builds on a `v*` tag or a manual workflow run. It runs the browser tests, creates both Windows binaries, tests the packaged app on Windows, and uploads a downloadable artifact. Tag builds publish the executables to GitHub Releases. You can also open **Actions → Windows desktop app → Run workflow** on `main`, leave **Publish the tested Windows downloads** enabled, and run it to build and publish the current version. The workflow uses GitHub's scoped token; no personal token is stored in the app or repository.
 
 Desktop windows have Node integration disabled, context isolation and sandboxing enabled, and no filesystem bridge exposed to project scripts. Only bundled files are served through the custom protocol. Custom libraries and hosted media still require Internet access; local fonts, demo media, and the editor work offline.
 
