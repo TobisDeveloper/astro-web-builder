@@ -23,6 +23,21 @@ Open the development server on port 4321. `npm run build` generates the static b
 - The local writing assistant makes template-based suggestions. It is explicitly not a remote AI model. AI discovery is supported through an exported llms.txt.
 - Export a complete static Astro project ZIP, HTML, or a single Astro file. ZIPs include SEO metadata, robots.txt, llms.txt, a sitemap when a canonical URL is set, and custom library URLs.
 
+## Designer workflow
+
+Use **Auto layout** for responsive section-based pages: drag sections on the canvas or reorder them in Layers. Switch **Canvas layout → Free canvas** for an artboard where elements can be placed anywhere.
+
+- Drag elements directly; alignment guides snap edges and centers to the artboard and nearby elements. Hold **Alt** to bypass snapping or **Shift** to constrain movement to one axis.
+- Drag the purple selection handles to resize. Edit desktop X/Y and width/height in the inspector, or use its alignment buttons.
+- Double-click a heading or paragraph to edit text in place. The inspector also supports font family, weight, color, spacing, and dimensions.
+- **V** selects, **H** activates hand panning, arrow keys nudge, **Shift + arrow** nudges by 10px, **Ctrl/Cmd + D** duplicates, **Delete** removes, and **Ctrl/Cmd + Z** undoes. Redo uses Ctrl/Cmd + Shift + Z or Ctrl + Y. These shortcuts also work with focus inside the canvas. Text fields retain normal typing shortcuts.
+- Zoom in/out or fit the page; the hand tool pans a zoomed artboard. Toggle the layout grid and snapping independently.
+- Lock layers to prevent canvas manipulation, or hide/show them. Layer order controls stacking on the free canvas.
+- Free-canvas positions and sizes scale horizontally for desktop/tablet. At mobile widths (600px and below), elements stack in layer order and decorative rectangles are hidden. Review mobile order and preview before exporting. Freeform editing on mobile uses section reordering, not absolute positioning.
+- Artboard height and background are editable. Switching back to Auto layout clears explicit element positions and sizes; Undo restores them.
+
+**Templates** opens six real page designs: Studio North, Orbit, Form & Field, Sunday Club, Atelier, and Blank canvas. Search/filter them, preview desktop/mobile, then create a new project. Existing projects remain available in the project menu.
+
 ## Exporting and deploying
 
 Click **Publish → Export Astro project**. Unzip, run `npm install`, then `npm run build`. Deploy the exported `dist/` directory to your preferred static host. The button exports files; it does not automatically deploy a website.
