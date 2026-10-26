@@ -9,6 +9,46 @@ npm run dev
 
 Open the development server on port 4321. `npm run build` generates the static builder in `dist/`.
 
+## Windows desktop app
+
+Download the **Setup** installer or **Portable** executable from [GitHub Releases](https://github.com/TobisDeveloper/astro-web-builder/releases). The app includes its own runtime and the built editor: you do **not** need Node.js, npm, or a local server to use a download. Both downloads target Windows x64.
+
+The app runs locally. Browser and desktop installations have separate storage profiles: use **Your projects → Backup / Import** to move projects between them. The desktop profile uses a stable `forma://app/` origin and persists across restarts and app updates. Uninstalling leaves project data intact. Keep JSON backups of important work.
+
+The current downloads are unsigned, so Windows may show a SmartScreen notice. There is no automatic updater; install a newer release when available. Editor branding is project-specific; the executable and installer keep the Forma product name.
+
+To build or develop the desktop app yourself on Windows (Node.js 24 recommended):
+
+```powershell
+npm ci
+npm run desktop:install
+npm run desktop
+```
+
+To create the installer and portable executable:
+
+```powershell
+npm run desktop:win
+```
+
+Outputs are written to `release/Forma-Setup-0.2.0-x64.exe` and `release/Forma-Portable-0.2.0-x64.exe`. `npm run desktop:pack` creates an unpacked application for your current operating system. `npm run test:desktop` checks the built editor inside Electron (run `npm run build` first). The desktop smoke test checks isolation, bundled assets, font uploads, branding, native ZIP export, and project persistence across restart.
+
+The **Windows desktop app** GitHub Actions workflow builds on a `v*` tag or a manual workflow run. It runs the browser tests, creates both Windows binaries, tests the packaged app on Windows, and uploads a downloadable artifact. Tag builds also publish the executables to GitHub Releases. The workflow uses GitHub's scoped token; no personal token is stored in the app or repository.
+
+Desktop windows have Node integration disabled, context isolation and sandboxing enabled, and no filesystem bridge exposed to project scripts. Only bundled files are served through the custom protocol. Custom libraries and hosted media still require Internet access; local fonts, demo media, and the editor work offline.
+
+## Custom fonts & branding
+
+Open **Brand** in the left rail, or **Project settings → Brand, fonts & identity**.
+
+- Upload WOFF2, WOFF, TTF, or OTF files (up to 2 MB each). WOFF2 is recommended for smaller projects. Name the face and choose its weight/style; variable fonts support a 100–900 weight range. Invalid fonts are checked before saving.
+- Click **Use on selection**, choose the uploaded face in the typography inspector, or use it as the brand heading/body font. Individual font choices override brand defaults; **Apply brand styles across page** resets those overrides.
+- Set your brand name, tagline, primary/button colors, and page background. Upload a logo and favicon; the logo and name appear in navigation, and an optional footer carries your brand identity.
+- Enable **Use my name, logo & color in the editor** to customize the editor header, accent, window title, and favicon for that project.
+- Custom fonts and brand images are embedded in your project backup and HTML/Astro export. No separate font hosting is needed. Removing an uploaded font restores the affected elements to brand defaults.
+
+Use fonts and logos you have permission to embed. Large fonts and images count toward local browser storage; export a backup if the editor reports that storage is full.
+
 ## What works
 
 - Add sections, headings, paragraphs, buttons, images, looping videos, galleries, navigation, and custom HTML.

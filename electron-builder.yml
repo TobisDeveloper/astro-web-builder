@@ -1,0 +1,32 @@
+appId: com.forma.builder
+productName: Forma
+copyright: Copyright © 2026 TobisDeveloper
+asar: true
+npmRebuild: false
+directories:
+  output: release
+  buildResources: desktop/assets
+files:
+  - dist/**/*
+  - desktop/**/*
+  - package.json
+  - '!desktop/smoke.cjs'
+  - '!node_modules/**/*'
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: portable
+      arch: [x64]
+  icon: desktop/assets/icon.ico
+  signExecutable: false
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  deleteAppDataOnUninstall: false
+  artifactName: Forma-Setup-${version}-${arch}.${ext}
+portable:
+  artifactName: Forma-Portable-${version}-${arch}.${ext}

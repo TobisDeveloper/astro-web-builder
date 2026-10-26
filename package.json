@@ -1,21 +1,26 @@
 {
   "name": "astro-web-builder",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.2.0",
+  "description": "Forma — a visual Astro website builder with a designer canvas, custom fonts and brand kits.",
+  "main": "desktop/main.cjs",
   "scripts": {
     "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev --host 0.0.0.0",
     "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview --host 0.0.0.0",
     "test": "playwright test",
-    "test:install": "playwright install chromium"
+    "test:install": "playwright install chromium",
+    "desktop:install": "install-electron",
+    "desktop": "npm run build && electron .",
+    "desktop:pack": "npm run build && electron-builder --dir --publish never",
+    "desktop:win": "npm run build && electron-builder --win --x64 --publish never",
+    "test:desktop": "node desktop/smoke.cjs"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TobisDeveloper/astro-web-builder.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "TobisDeveloper",
   "license": "ISC",
   "type": "module",
   "bugs": {
@@ -35,6 +40,11 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",
-    "cross-env": "^10.1.0"
+    "cross-env": "^10.1.0",
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }
