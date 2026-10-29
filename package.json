@@ -9,11 +9,13 @@
     "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview --host 0.0.0.0",
     "test": "playwright test",
     "test:install": "playwright install chromium",
-    "desktop:install": "install-electron",
-    "desktop": "npm run build && electron .",
-    "desktop:pack": "npm run build && electron-builder --dir --publish never",
-    "desktop:win": "npm run build && electron-builder --win --x64 --publish never",
-    "test:desktop": "node desktop/smoke.cjs"
+    "desktop:install": "node desktop/tools.cjs install",
+    "desktop": "npm run build && node desktop/tools.cjs start",
+    "desktop:pack": "npm run build && node desktop/tools.cjs pack --dir --publish never",
+    "desktop:win": "npm run build && node desktop/tools.cjs pack --win --x64 --publish never",
+    "test:desktop": "node desktop/smoke.cjs",
+    "desktop:doctor": "node desktop/tools.cjs doctor",
+    "test:desktop-tools": "node --test desktop/tools.test.cjs"
   },
   "repository": {
     "type": "git",

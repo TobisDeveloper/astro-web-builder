@@ -31,6 +31,16 @@ To create the installer and portable executable:
 npm run desktop:win
 ```
 
+If a previous installation reports **`electron-builder` is not recognized**, repair the local dependency and check it:
+
+```powershell
+npm install --save-dev electron-builder@26.18.0
+npm run desktop:doctor
+npm run desktop:win
+```
+
+Desktop commands now launch installed JavaScript entry points with Node directly, so they work even when npm's Windows `.cmd` shortcuts are missing. The doctor command reports a missing dependency with its exact install command. `npm run test:desktop-tools` verifies the launcher without executable shortcuts, with spaces in the project path, and inside an ES-module project. The `electron-winstaller` install-script warning relates to Squirrel; Forma builds NSIS and portable targets.
+
 Outputs are written to `release/Forma-Setup-0.2.0-x64.exe` and `release/Forma-Portable-0.2.0-x64.exe`. `npm run desktop:pack` creates an unpacked application for your current operating system. `npm run test:desktop` checks the built editor inside Electron (run `npm run build` first). The desktop smoke test checks isolation, bundled assets, font uploads, branding, native ZIP export, and project persistence across restart.
 
 The **Windows desktop app** GitHub Actions workflow builds on a `v*` tag or a manual workflow run. It runs the browser tests, creates both Windows binaries, tests the packaged app on Windows, and uploads a downloadable artifact. Tag builds publish the executables to GitHub Releases. You can also open **Actions → Windows desktop app → Run workflow** on `main`, leave **Publish the tested Windows downloads** enabled, and run it to build and publish the current version. The workflow uses GitHub's scoped token; no personal token is stored in the app or repository.

@@ -32,6 +32,8 @@ jobs:
           "version=$version" >> $env:GITHUB_OUTPUT
           if ($env:RELEASE_REF_TYPE -eq 'tag' -and $env:RELEASE_TAG_NAME -ne "v$version") { throw 'Release tag must match package.json version.' }
       - run: npm ci
+      - run: npm run test:desktop-tools
+      - run: npm run desktop:doctor
       - run: npm run desktop:install
       - run: npm run build
       - run: npm run test:install

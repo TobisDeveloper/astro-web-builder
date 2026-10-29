@@ -11,6 +11,7 @@ files:
   - desktop/**/*
   - package.json
   - '!desktop/smoke.cjs'
+  - '!desktop/tools*.cjs'
   - '!node_modules/**/*'
 win:
   target:
